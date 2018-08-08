@@ -1,3 +1,15 @@
+const debug = true;
+
+const debugMsg = (text, debugFlag = false) => {
+  if (debug) {
+    if (debugFlag) {
+      console.log('DEBBUG: ' + text);
+    } else {
+      console.log(text);
+    }
+  }
+};
+
 const generatePlayerBoard = (numRows, numCols) => {
   if (numRows <= 2 || numRows > 54) {
     throw 'Rows must be greater than 2 and fewer than 55.';
@@ -5,7 +17,7 @@ const generatePlayerBoard = (numRows, numCols) => {
   if (numCols <= 2 || numCols > 15) {
     throw 'Columns must be greater than 2 and fewer than 16.';
   }
-//  console.log(`Creating player board with ${numRows} rows and ${numCols} columns.`);
+//  debugMsg(`Creating player board with ${numRows} rows and ${numCols} columns.`);
   const board = [];
   for (let i = 0; i < numRows; i++) {
     let row = [];
@@ -27,7 +39,7 @@ const generateBombBoard = (numRows, numCols, numBombs) => {
   if (numBombs < 1 || numBombs >= numRows * numCols) {
     throw 'Number of Bombs must be greater than 0 and fewer than total number of squares';
   }
-  //  console.log(`Creating player board with ${numRows} rows and ${numCols} columns.`);
+  //  debugMsg(`Creating player board with ${numRows} rows and ${numCols} columns.`);
   const board = [];
   for (let i = 0; i < numRows; i++) {
     let row = [];
@@ -75,19 +87,19 @@ const getNumberOfNeighborBombs = (bombBoard, rowIndex, colIndex) => {
     const neighborRowIndex = rowIndex + offset[0];
     const neighborColIndex = colIndex + offset[1];
 
-    console.log(numberOfRows + " rows and " + numberOfCols + " columns.");
-    if (neighborRowIndex >= 0 && neighborRowIndex < numberOfRows && neighborColIndex > 0 && neighborColIndex < numberOfCols) {
+    debugMsg(numberOfRows + " rows and " + numberOfCols + " columns.");
+    if (neighborRowIndex >= 0 && neighborRowIndex < numberOfRows && neighborColIndex >= 0 && neighborColIndex < numberOfCols) {
 
-      console.log(`Checking offset at index ${neighborRowIndex}, ${neighborColIndex}`);
+      debugMsg(`Checking offset at index ${neighborRowIndex}, ${neighborColIndex}`);
 
       if (bombBoard[neighborRowIndex][neighborColIndex] === 'B') {
-        console.log(`-> I found a bomb at index ${neighborRowIndex}, ${neighborColIndex}`);
+        debugMsg(`-> I found a bomb at index ${neighborRowIndex}, ${neighborColIndex}`);
         adjacentBombs++;
       } else {
-        console.log('-> No bomb here');
+        debugMsg('-> No bomb here');
       }
     } else {
-      console.log(`Tile at index ${neighborRowIndex}, ${neighborColIndex} is not valid.`);
+      debugMsg(`Tile at index ${neighborRowIndex}, ${neighborColIndex} is not valid.`);
     }
   });
   return adjacentBombs;
@@ -95,14 +107,14 @@ const getNumberOfNeighborBombs = (bombBoard, rowIndex, colIndex) => {
 
 const flipTile = (playerBoard, bombBoard, rowIndex, colIndex) => {
   if (playerBoard[rowIndex][colIndex] !== ' ') {
-    console.log('This tile has already been flipped!');
+    debugMsg('This tile has already been flipped!');
     return;
   } else if (bombBoard[rowIndex][colIndex] === 'B') {
     playerBoard[rowIndex][colIndex] = 'B';
-    console.log(`There's a bomb at ${rowIndex}, ${colIndex}!`);
+    debugMsg(`There's a bomb at ${rowIndex}, ${colIndex}!`);
     return;
   } else {
-    console.log(`The tile at ${rowIndex}, ${colIndex} has not been flipped. Checking for adjacent bombs.`);
+    debugMsg(`The tile at ${rowIndex}, ${colIndex} has not been flipped. Checking for adjacent bombs.`);
     playerBoard[rowIndex][colIndex] = getNumberOfNeighborBombs(bombBoard, rowIndex, colIndex);
   }
   printBoard(playerBoard);
