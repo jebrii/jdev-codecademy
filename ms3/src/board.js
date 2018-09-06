@@ -66,14 +66,6 @@ export class Board {
   }
 
   static generatePlayerBoard(numRows, numCols) {
-    /*
-    if (numRows <= 2 || numRows > 54) {
-      throw 'Rows must be greater than 2 and fewer than 55.';
-    }
-    if (numCols <= 2 || numCols > 15) {
-      throw 'Columns must be greater than 2 and fewer than 16.';
-    }
-    */
     const board = [];
     for (let i = 0; i < numRows; i++) {
       let row = [];
@@ -115,5 +107,5 @@ export class Board {
     }
 
     return board;
-  };
+  }
 }

@@ -22,14 +22,12 @@ var Board = exports.Board = function () {
     key: 'flipTile',
     value: function flipTile(rowIndex, colIndex) {
       if (this._playerBoard[rowIndex][colIndex] !== ' ') {
-        dbg('flipTile: Already flipped at (' + rowIndex + ', ' + colIndex + ')!');
+        console.log("Tile already flipped!");
         return;
       } else if (this._bombBoard[rowIndex][colIndex] === 'B') {
-        dbg('flipTile: There\'s a bomb at (' + rowIndex + ', ' + colIndex + ')!');
         this._playerBoard[rowIndex][colIndex] = 'B';
         return 'B';
       } else {
-        dbg('flipTile: The tile at (' + rowIndex + ', ' + colIndex + ') has not been flipped. Checking for adjacent bombs.');
         this._playerBoard[rowIndex][colIndex] = this.getNumberOfNeighborBombs(rowIndex, colIndex);
         this._numberOfTiles--;
         return this._playerBoard[rowIndex][colIndex];
@@ -49,17 +47,9 @@ var Board = exports.Board = function () {
         var neighborRowIndex = rowIndex + offset[0];
         var neighborColIndex = colIndex + offset[1];
         if (neighborRowIndex >= 0 && neighborRowIndex < numberOfRows && neighborColIndex > 0 && neighborColIndex < numberOfCols) {
-
-          dbg('-> Checking offset at index ' + neighborRowIndex + ', ' + neighborColIndex);
-
           if (_this._bombBoard[neighborRowIndex][neighborColIndex] === 'B') {
-            dbg('-> -> I found a bomb at index ' + neighborRowIndex + ', ' + neighborColIndex);
             adjacentBombs++;
-          } else {
-            dbg('-> -> No bomb here');
           }
-        } else {
-          dbg('-> Tile at index ' + neighborRowIndex + ', ' + neighborColIndex + ' is not valid.');
         }
       });
       return adjacentBombs;
@@ -77,7 +67,6 @@ var Board = exports.Board = function () {
         return row.join(' | ');
       }).join('\n'));
       console.log('\n');
-      dbg('Remaining safe tiles: ' + (this._numberOfTiles - this._numberOfBombs) + ';');
     }
   }, {
     key: 'playerBoard',
@@ -92,15 +81,6 @@ var Board = exports.Board = function () {
   }], [{
     key: 'generatePlayerBoard',
     value: function generatePlayerBoard(numRows, numCols) {
-      /*
-      if (numRows <= 2 || numRows > 54) {
-        throw 'Rows must be greater than 2 and fewer than 55.';
-      }
-      if (numCols <= 2 || numCols > 15) {
-        throw 'Columns must be greater than 2 and fewer than 16.';
-      }
-      dbg(`Creating player board with ${numRows} rows and ${numCols} columns.`);
-      */
       var board = [];
       for (var i = 0; i < numRows; i++) {
         var row = [];
@@ -123,7 +103,6 @@ var Board = exports.Board = function () {
       if (numBombs < 1 || numBombs >= numRows * numCols) {
         throw 'Number of Bombs must be greater than 0 and fewer than total number of squares';
       }
-      //  dbg(`Creating player board with ${numRows} rows and ${numCols} columns.`);
       var board = [];
       for (var i = 0; i < numRows; i++) {
         var row = [];
