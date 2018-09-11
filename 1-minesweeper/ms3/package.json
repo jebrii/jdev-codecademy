@@ -1,0 +1,16 @@
+{
+  "name": "jebrii-minesweeper",
+  "version": "1.0.3",
+  "description": "Command line minesweeper project created during node.js coursework",
+  "main": "game.js",
+  "scripts": {
+    "test": "node game.js",
+    "build": "babel src -d lib"
+  },
+  "author": "jebrii",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
