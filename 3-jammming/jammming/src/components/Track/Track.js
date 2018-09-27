@@ -7,9 +7,9 @@ export class Track extends React.Component {
     super(props);
     this.state = {
       trackAction: '+',
-      trackName: '',
-      trackArtist: '',
-      trackAlbum: ''
+      trackName: this.props.track.name,
+      trackArtist: this.props.track.artist,
+      trackAlbum: this.props.track.album
     };
   }
   renderAction() {
