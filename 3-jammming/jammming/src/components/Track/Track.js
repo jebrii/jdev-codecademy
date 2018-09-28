@@ -5,20 +5,23 @@ import './Track.css';
 export class Track extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      trackAction: '+',
-      trackName: this.props.track.name,
-      trackArtist: this.props.track.artist,
-      trackAlbum: this.props.track.album
-    };
     this.addTrack = this.addTrack.bind(this);
+    this.removeTrack = this.removeTrack.bind(this);
   }
 
   addTrack() {
     if (this.props.onAdd) {
       this.props.onAdd(this.props.track);
     } else {
-      console.log('whoops (from Track.js)');
+      console.log('whoopsie onAdd (from Track.js)');
+    }
+  }
+
+  removeTrack() {
+    if (this.props.onRemove) {
+      this.props.onRemove(this.props.track);
+    } else {
+      console.log('whoopsie onRemovme (from Track.js)');
     }
   }
 
@@ -29,13 +32,21 @@ export class Track extends React.Component {
 
 
   render() {
+    let trackActionIcon;
+    if (this.props.isRemoval) {
+      trackActionIcon = <a className="Track-action" onClick={this.removeTrack}> - </a>;
+    } else if (this.props.isRemoval === false) {
+      trackActionIcon = <a className="Track-action" onClick={this.addTrack}> + </a>;
+    } else {
+      trackActionIcon = <p>Whoops!</p>
+    }
     return (
       <div className="Track">
         <div className="Track-information">
-          <h3>{this.state.trackName}</h3>
-          <p>{this.state.trackArtist} | {this.state.trackAlbum}</p>
+          <h3>{this.props.track.name}</h3>
+          <p>{this.props.track.artist} | {this.props.track.album}</p>
         </div>
-        <a className="Track-action" onClick={this.addTrack}>{this.state.trackAction}</a>
+        {trackActionIcon}
       </div>
     );
   }
