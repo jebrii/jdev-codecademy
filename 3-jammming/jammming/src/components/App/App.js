@@ -16,25 +16,29 @@ class App extends Component {
           id: 0,
           name: 'song 1',
           artist: 'artist 1',
-          album: 'album 1'
+          album: 'album 1',
+          uri: null
         },
         {
           id: 1,
           name: 'song 2',
           artist: 'artist 2',
-          album: 'album 2'
+          album: 'album 2',
+          uri: null
         },
         {
           id: 2,
           name: 'song 3',
           artist: 'artist 3',
-          album: 'album 3'
+          album: 'album 3',
+          uri: null
         },
         {
           id: 3,
           name: 'song 4',
           artist: 'artist 4',
-          album: 'album 4'
+          album: 'album 4',
+          uri: null
         }
       ],
       playlistName: 'New Playlist',
@@ -43,31 +47,36 @@ class App extends Component {
           id: 10,
           name: 'p song 1',
           artist: 'p artist 1',
-          album: 'p album 1'
+          album: 'p album 1',
+          uri: null
         },
         {
           id: 11,
           name: 'p song 2',
           artist: 'p artist 2',
-          album: 'p album 2'
+          album: 'p album 2',
+          uri: null
         },
         {
           id: 12,
           name: 'p song 3',
           artist: 'p artist 3',
-          album: 'p album 3'
+          album: 'p album 3',
+          uri: null
         },
         {
           id: 13,
           name: 'p song 4',
           artist: 'p artist 4',
-          album: 'p album 4'
+          album: 'p album 4',
+          uri: null
         }
       ]
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlaylist = this.savePlaylist.bind(this);
   }
 
   addTrack(track) {
@@ -89,7 +98,14 @@ class App extends Component {
   }
 
   updatePlaylistName(name) {
-    this.setState( {playlistName: name });
+    this.setState( { playlistName: name });
+  }
+
+  savePlaylist() {
+    const trackURIs = [];
+    this.state.playlistTracks.map(track => trackURIs.push(track.uri));
+    // More stuff
+    console.log('Playlist saved');
   }
 
   render() {
@@ -100,7 +116,7 @@ class App extends Component {
           <SearchBar />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
-            <Playlist name={this.state.playlistName} onNameChange={this.updatePlaylistName} tracks={this.state.playlistTracks} onRemove={this.removeTrack} />
+            <Playlist name={this.state.playlistName} tracks={this.state.playlistTracks} onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} />
           </div>
         </div>
       </div>
