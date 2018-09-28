@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../../assets/logo.svg';
+// import logo from '../../assets/logo.svg';
 import './App.css';
 
 // Components
@@ -65,16 +65,26 @@ class App extends Component {
         }
       ]
     };
+    this.addTrack = this.addTrack.bind(this);
+  }
+
+  addTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      // Track id was found in list of tracks already in playlist... return, doing nothing
+      return;
+    } else {
+      // Track id not already in playlist... add to end of state object
+      this.setState( { playlistTracks: [...this.state.playlistTracks, track]} );
+    }
   }
   render() {
-    console.log('App state searchResults: ' + this.state.searchResults[0].name);
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} />
+            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
             <Playlist name={this.state.playlistName} tracks={this.state.playlistTracks} />
           </div>
         </div>
