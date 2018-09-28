@@ -6,6 +6,7 @@ import './App.css';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { SearchResults } from '../SearchResults/SearchResults';
 import { Playlist } from '../Playlist/Playlist';
+import { Spotify } from '../../util/Spotify';
 
 class App extends Component {
   constructor(props) {
@@ -42,36 +43,7 @@ class App extends Component {
         }
       ],
       playlistName: 'New Playlist',
-      playlistTracks: [
-        {
-          id: 10,
-          name: 'p song 1',
-          artist: 'p artist 1',
-          album: 'p album 1',
-          uri: null
-        },
-        {
-          id: 11,
-          name: 'p song 2',
-          artist: 'p artist 2',
-          album: 'p album 2',
-          uri: null
-        },
-        {
-          id: 12,
-          name: 'p song 3',
-          artist: 'p artist 3',
-          album: 'p album 3',
-          uri: null
-        },
-        {
-          id: 13,
-          name: 'p song 4',
-          artist: 'p artist 4',
-          album: 'p album 4',
-          uri: null
-        }
-      ]
+      playlistTracks: []
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -110,7 +82,7 @@ class App extends Component {
   }
 
   search(term) {
-    console.log(term);
+    this.setState({ searchResults: Spotify.search(term) });
   }
 
   render() {
