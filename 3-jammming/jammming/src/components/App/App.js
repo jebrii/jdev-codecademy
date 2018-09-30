@@ -12,44 +12,17 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [
-        {
-          id: 0,
-          name: 'song 1',
-          artist: 'artist 1',
-          album: 'album 1',
-          uri: null
-        },
-        {
-          id: 1,
-          name: 'song 2',
-          artist: 'artist 2',
-          album: 'album 2',
-          uri: null
-        },
-        {
-          id: 2,
-          name: 'song 3',
-          artist: 'artist 3',
-          album: 'album 3',
-          uri: null
-        },
-        {
-          id: 3,
-          name: 'song 4',
-          artist: 'artist 4',
-          album: 'album 4',
-          uri: null
-        }
-      ],
+      searchResults: [],
       playlistName: 'New Playlist',
-      playlistTracks: []
+      playlistTracks: [],
+      accessToken: ''
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    // this.getAccessToken = this.getAccessToken.bind(this);
   }
 
   addTrack(track) {
@@ -82,10 +55,14 @@ class App extends Component {
   }
 
   search(term) {
-    this.setState({ searchResults: Spotify.search(term) });
+    Spotify.search(term, newTracks => {
+      this.setState({ searchResults: newTracks });
+    });
+
   }
 
   render() {
+    Spotify.getAccessToken();
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
