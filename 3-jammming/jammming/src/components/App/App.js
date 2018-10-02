@@ -15,7 +15,8 @@ class App extends Component {
       searchResults: [],
       playlistName: 'New Playlist',
       playlistTracks: [],
-      accessToken: ''
+      accessToken: '',
+      displayName: ''
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -48,10 +49,14 @@ class App extends Component {
   }
 
   savePlaylist() {
-    const trackURIs = [];
-    this.state.playlistTracks.map(track => trackURIs.push(track.uri));
-    // More stuff
-    console.log('Playlist saved');
+    const trackURIs = this.state.playlistTracks.map(track => track.uri);
+
+    Spotify.savePlaylist(this.state.playlistName, trackURIs, () => {
+      this.setState({
+        playlistName: 'New Playlist',
+        playlistTracks: []
+      })
+    });
   }
 
   search(term) {
@@ -61,13 +66,20 @@ class App extends Component {
 
   }
 
+  componentDidMount() {
+    Spotify.getAccessToken(displayName => {
+      this.setState({
+        displayName: displayName
+      })
+    });
+  }
+
   render() {
-    Spotify.getAccessToken();
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar onSearch={this.search} />
+          <SearchBar onSearch={this.search} userName={this.state.displayName} />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack} />
             <Playlist name={this.state.playlistName} tracks={this.state.playlistTracks} onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} />

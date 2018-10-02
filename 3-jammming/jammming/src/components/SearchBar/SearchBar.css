@@ -35,3 +35,8 @@
 .SearchBar a:hover {
   background-color: rgba(108, 65, 233, .7);
 }
+
+.SearchBar .user-text {
+  position: relative;
+  top: 100px
+}

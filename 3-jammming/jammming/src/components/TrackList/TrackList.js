@@ -6,7 +6,6 @@ import { Track } from '../Track/Track';
 
 export class TrackList extends React.Component {
   render() {
-    console.log(this.props.tracks);
     if (this.props.tracks && this.props.isRemoval !== undefined) {
       return (
         <div className="TrackList">

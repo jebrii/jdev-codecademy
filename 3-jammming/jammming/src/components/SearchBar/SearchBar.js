@@ -25,6 +25,11 @@ export class SearchBar extends React.Component {
       <div className="SearchBar">
         <input placeholder="Enter A Song, Album, or Artist" onChange={this.handleTermChange} />
         <a onClick={this.search}>SEARCH</a>
+        {this.props.userName ? (
+          <div>
+            <p className="user-text">Logged in as: {this.props.userName}</p>
+          </div>
+        ) : <p>Oops</p>}
       </div>
     );
   }
