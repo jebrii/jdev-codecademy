@@ -71,7 +71,6 @@ export const Spotify = {
   },
 
   createPlaylist(userId, playlistName, cb) {
-    console.log('userId: ' + userId);
     const headers = {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
