@@ -26,8 +26,40 @@ export const Spotify = {
     if (term) {
       if (!accessToken) {
         alert(`Access token: ${accessToken} is invalid!`);
+      } else {
+        try  {
+          fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }).then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Request failed!');
+            }
+          }, networkError => {
+            console.log(networkError.message);
+          }).then(newTracks => newTracks.tracks.items.map((track) => {
+            return {
+              id: track.id,
+              name: track.name,
+              artist: track.artists[0].name,
+              album: track.album.name,
+              uri: track.uri
+            }
+          })).then(data => cb(data));
+        } catch(error) {
+          alert(error);
+        }
       }
-      fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
+    }
+    return;
+  },
+
+  getUser(cb) {
+    try {
+      return fetch('https://api.spotify.com/v1/me', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -39,35 +71,12 @@ export const Spotify = {
         }
       }, networkError => {
         console.log(networkError.message);
-      }).then(newTracks => newTracks.tracks.items.map((track) => {
-        return {
-          id: track.id,
-          name: track.name,
-          artist: track.artists[0].name,
-          album: track.album.name,
-          uri: track.uri
-        }
-      })).then(data => cb(data));
+      }).then(responseJson => {
+        cb(responseJson);
+      });
+    } catch(error) {
+      alert(error);
     }
-    return;
-  },
-
-  getUser(cb) {
-    return fetch('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Request failed!');
-      }
-    }, networkError => {
-      console.log(networkError.message);
-    }).then(responseJson => {
-      cb(responseJson);
-    });
   },
 
   createPlaylist(userId, playlistName, cb) {
@@ -79,22 +88,25 @@ export const Spotify = {
       name: playlistName,
       public: false
     };
-
-    return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(body)
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Request failed!');
-      }
-    }, networkError => {
-      console.log(networkError.message);
-    }).then(responseJson => {
-      cb(responseJson.id);
-    });
+    try {
+      return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Request failed!');
+        }
+      }, networkError => {
+        console.log(networkError.message);
+      }).then(responseJson => {
+        cb(responseJson.id);
+      });
+    } catch(error) {
+      alert(error);
+    }
   },
 
   addPlaylistTracks(playlistId, tracks) {
@@ -105,33 +117,41 @@ export const Spotify = {
     const body = {
       uris: tracks
     };
-    return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(body)
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Request failed!');
-      }
-    }, networkError => {
-      console.log(networkError.message);
-    }).then(() => {
-      console.log('Playlists added successfully!');
-      return;
-    });
+    try {
+      return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Request failed!');
+        }
+      }, networkError => {
+        console.log(networkError.message);
+      }).then(() => {
+        console.log('Playlists added successfully!');
+        return;
+      });
+    } catch(error) {
+      alert(error);
+    }
   },
 
   savePlaylist(playlistName, tracks, cb) {
-    if (playlistName.length > 0 && tracks.length > 0) {
-      this.getUser((userJson) => {
-        this.createPlaylist(userJson.id, playlistName, (playlistId) => {
-          this.addPlaylistTracks(playlistId, tracks);
-        });
-      }).then(cb());
-    } else {
-      console.log('Could not create playlist!');
+    try {
+      if (playlistName.length > 0 && tracks.length > 0) {
+        this.getUser((userJson) => {
+          this.createPlaylist(userJson.id, playlistName, (playlistId) => {
+            this.addPlaylistTracks(playlistId, tracks);
+          });
+        }).then(cb());
+      } else {
+        throw new Error('Could not create playlist!');
+      }
+    } catch(error) {
+      alert(error);
     }
   }
 };
