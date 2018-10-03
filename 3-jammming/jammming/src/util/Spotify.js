@@ -18,7 +18,9 @@ export const Spotify = {
       window.location = `https://accounts.spotify.com/authorize?client_id=${creds.clientId}&response_type=token&scope=playlist-modify-private&redirect_uri=${redirectURI}`;
     }
     this.getUser(userJson => {
-      cb(userJson.display_name)
+      if (cb) {
+        cb(userJson.display_name);
+      }
     });
   },
 
