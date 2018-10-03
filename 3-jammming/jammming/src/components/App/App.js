@@ -15,7 +15,6 @@ class App extends Component {
       searchResults: [],
       playlistName: 'New Playlist',
       playlistTracks: [],
-      accessToken: '',
       displayName: ''
     };
     this.addTrack = this.addTrack.bind(this);
@@ -23,7 +22,6 @@ class App extends Component {
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
-    // this.getAccessToken = this.getAccessToken.bind(this);
   }
 
   addTrack(track) {
@@ -45,7 +43,9 @@ class App extends Component {
   }
 
   updatePlaylistName(name) {
-    this.setState( { playlistName: name });
+    this.setState({
+      playlistName: name
+    });
   }
 
   savePlaylist() {
@@ -60,14 +60,16 @@ class App extends Component {
   }
 
   search(term) {
-    Spotify.search(term, newTracks => {
-      this.setState({ searchResults: newTracks });
+    Spotify.search(term, (newTracks) => {
+      this.setState({
+        searchResults: newTracks
+      });
     });
 
   }
 
   componentDidMount() {
-    Spotify.getAccessToken(displayName => {
+    Spotify.getAccessToken((displayName) => {
       this.setState({
         displayName: displayName
       })
